@@ -1,0 +1,11 @@
+applications:
+- name: cna-demo
+  instances: 1
+  memory: 1024M
+  disk_quota: 1024M
+  stack: cflinuxfs2
+  routes:
+  - route: cna-demo.cfapps.io
+  services:
+  - config-server
+  - cloud-bus
