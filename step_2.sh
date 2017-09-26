@@ -1,3 +1,6 @@
+cd demo
+
+cat > src/main/java/com/example/demo/DemoApplication.java <<END
 package com.example.demo;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -17,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 public class DemoApplication {
 
-	@Value("${config.name}")
+	@Value("\${config.name}")
 	String name = "World";
 
     @HystrixCommand(fallbackMethod = "reliable")
@@ -41,3 +44,10 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 }
+END
+
+mvn clean package
+
+cf push cna-demo -p target/demo-0.0.1-SNAPSHOT.jar --no-start
+cf bind-service cna-demo circuit-breaker-dashboard
+cf start cna-demo
