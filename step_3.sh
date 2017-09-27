@@ -1,3 +1,6 @@
+cd demo
+
+cat > src/main/java/com/example/demo/DemoApplication.java <<END
 package com.example.demo;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -27,7 +30,7 @@ public class DemoApplication {
     @Autowired
     private DiscoveryClient discoveryClient;
 
-    @Value("${spring.application.name}")
+    @Value("\${spring.application.name}")
     String applicationName;
 
     @RequestMapping("/")
@@ -48,3 +51,17 @@ public class DemoApplication {
         SpringApplication.run(DemoApplication.class, args);
     }
 }
+END
+
+cat > src/main/resources/application.properties <<EOF
+management.security.enabled=false
+security.basic.enabled=false
+EOF
+
+mvn clean package
+
+cf push cna-demo -p target/demo-0.0.1-SNAPSHOT.jar --no-start
+cf bind-service cna-demo service-registry
+cf start cna-demo
+
+cf scale cna-demo -i 2
