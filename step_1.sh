@@ -1,12 +1,3 @@
-# Use Spring Start
-#- Config Client PCF
-#- Circuit Breaker PCF
-#- Service Registry PCF
-#- Cloud Bus AMQP
-#- Actuator
-
-unzip demo.zip
-cd demo
 
 cat > src/main/java/com/example/demo/DemoApplication.java <<END
 package com.example.demo;
@@ -50,11 +41,8 @@ EOF
 mvn clean package
 
 echo "{\"git\": {\"uri\": \"https://github.com/micahyoung/cna-demo-config.git\"}}" > cloud-config-uri.json
-cf create-service p-config-server standard config-server -c cloud-config-uri.json
-cf create-service cloudamqp lemur cloud-bus
-cf create-service p-service-registry standard service-registry
-cf create-service p-circuit-breaker-dashboard standard circuit-breaker-dashboard
 
+cf push cna-demo -p target/demo-0.0.1-SNAPSHOT.jar --no-start
 cf bind-service  cna-demo cloud-bus
 cf bind-service  cna-demo config-server
-cf push cna-demo -p target/demo-0.0.1-SNAPSHOT.jar
+cf start cna-demo

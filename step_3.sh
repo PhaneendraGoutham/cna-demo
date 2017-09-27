@@ -1,5 +1,3 @@
-cd demo
-
 cat > src/main/java/com/example/demo/DemoApplication.java <<END
 package com.example.demo;
 
