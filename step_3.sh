@@ -56,10 +56,10 @@ management.security.enabled=false
 security.basic.enabled=false
 EOF
 
+read  -n 1 -p "Continue: " mainmenuinput
+
 mvn clean package
 
 cf push cna-demo -p target/demo-0.0.1-SNAPSHOT.jar --no-start
 cf bind-service cna-demo service-registry
 cf start cna-demo
-
-cf scale cna-demo -i 2

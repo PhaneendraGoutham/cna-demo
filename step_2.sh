@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 public class DemoApplication {
 
-	@Value("\${config.name}")
-	String name = "World";
+	@Value("\${config.greeting}")
+	String greeting;
 
     @HystrixCommand(fallbackMethod = "reliable")
     @RequestMapping("/")
@@ -31,11 +31,11 @@ public class DemoApplication {
         if (Math.random() <= 0.5) {
             throw new RuntimeException("BOOM");
         };
-        return "Risky " + name;
+        return "Risky " + greeting;
     }
 
     private String reliable() {
-        return "Reliable " + name;
+        return "Reliable " + greeting;
     }
 
     public static void main(String[] args) {
@@ -43,6 +43,8 @@ public class DemoApplication {
 	}
 }
 END
+
+read  -n 1 -p "Continue: " mainmenuinput
 
 mvn clean package
 

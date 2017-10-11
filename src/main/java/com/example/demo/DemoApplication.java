@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @EnableDiscoveryClient
@@ -37,7 +38,7 @@ public class DemoApplication {
 
     @HystrixCommand(fallbackMethod = "fallbackInstanceNames")
     private String instanceNames() {
-        return this.discoveryClient.getInstances(applicationName).stream().map(ServiceInstance::getHost).collect(Collectors.joining(", "));
+        return this.discoveryClient.getInstances(applicationName).stream().map(ServiceInstance::getMetadata).map(Map::toString).collect(Collectors.joining(", "));
     }
 
     private String fallbackInstanceNames() {

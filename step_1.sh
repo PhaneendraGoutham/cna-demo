@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 public class DemoApplication {
 
-	@Value("\${config.name}")
-	String name = "World";
+	@Value("\${config.greeting}")
+	String greeting;
 
 	@RequestMapping("/")
 	public String home() {
-		return "Hello " + name;
+		return "Hello " + greeting;
 	}
 
 	public static void main(String[] args) {
@@ -35,12 +35,12 @@ mkdir -p src/main/resources
 cat > src/main/resources/application.properties <<EOF
 management.security.enabled=false
 security.basic.enabled=false
-config.name=Foo
+config.greeting=World
 EOF
 
-mvn clean package
+read  -n 1 -p "Continue: " mainmenuinput
 
-echo "{\"git\": {\"uri\": \"https://github.com/micahyoung/cna-demo-config.git\"}}" > cloud-config-uri.json
+mvn clean package
 
 cf push cna-demo -p target/demo-0.0.1-SNAPSHOT.jar --no-start
 cf bind-service  cna-demo cloud-bus
